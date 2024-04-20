@@ -1,0 +1,79 @@
+.red-text {
+    color: #dc3545; /* Màu đỏ */
+}
+
+/* CSS for borrowed books */
+.borrowed {
+    color: #dc3545; /* Màu đỏ */
+}
+.card-text.return-date {
+    color: #dc3545; /* Màu đỏ */
+}
+.card {
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex; /* Sử dụng flexbox */
+}
+
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 15px 15px 0 0;
+}
+
+.book-image {
+    max-width: 200px;
+    max-height: 200px;
+    border-radius: 15px 15px 0 0;
+
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+.btn {
+    cursor: pointer;
+}
+
+.btn-primary {
+    background-color: #2d7ee7;
+    border-color: #2d7ee7;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.fa-book-reader,
+.fa-undo-alt {
+    margin-right: 5px;
+}
+
+.book__content {
+    max-height: 360px; 
+    /* max-width: 600px; */
+    width: 600px;
+    overflow: hidden; 
+   margin-left: 10px;
+}
+
+.custom-card {
+    margin-left: 20px;
+    transition: all 0.3s ease;
+}
+
+.custom-card:hover {
+    transform: translateY(-3px); /* Giảm khoảng cách khi rê chuột */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2); /* Hiệu ứng đổ bóng nhẹ */
+}

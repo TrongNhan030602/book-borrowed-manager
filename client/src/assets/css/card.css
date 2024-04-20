@@ -1,0 +1,51 @@
+.card {
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 15px 15px 0 0;
+  }
+  
+  .card-body {
+    padding: 1.5rem;
+  }
+  
+  .btn {
+    cursor: pointer;
+  }
+  
+  .btn-primary {
+    background-color: #2d7ee7;
+    border-color: #2d7ee7;
+  }
+  
+  .btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+  }
+  
+  .fa-book-reader,
+  .fa-undo-alt {
+    margin-right: 5px;
+  }
+  
+  .book__content {
+    max-height: 400px;
+    height: 360px;
+  }
+  
+  .custom-card {
+    transition: all 0.3s ease;
+  }
+  
+  .custom-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+  }
