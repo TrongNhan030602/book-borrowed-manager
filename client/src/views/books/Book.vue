@@ -4,6 +4,16 @@
     <div class="text-right mb-4 mt-0">
       <input type="text" class="form-control" placeholder="Search by name, author, or publication year" v-model="searchKeyword" @input="searchBooks">
     </div>
+    <div class="text-right mb-4 mt-0">
+      <label class="pr-2">Sort by:</label>
+      <select v-model="sortKey">
+        <option value="name">Book Name</option>
+        <option value="originOrAuthor">Author</option>
+        <option value="quantity">Quantity</option>
+        <option value="publicationYear">Publication Year</option>
+      </select>
+      <button class="btn btn-sm btn-secondary ml-2" @click="toggleSortOrder">{{ sortDirIcon }}</button>
+    </div>
     <div class="table-responsive">
       <table class="table table-striped custom-table">
         <thead>
@@ -17,7 +27,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(book, index) in filteredBooks" :key="book.id">
+          <tr v-for="(book, index) in filteredAndSortedBooks" :key="book.id">
             <td>{{ index + 1 }}</td>
             <td>{{ book.name }}</td>
             <td>{{ book.originOrAuthor }}</td>
@@ -28,7 +38,7 @@
               <button class="btn btn-sm btn-danger ml-1" @click="deleteBook(book._id)">Delete</button>
             </td>
           </tr>
-          <tr v-if="filteredBooks.length === 0">
+          <tr v-if="filteredAndSortedBooks.length === 0">
             <td colspan="6" class="text-center">No book available</td>
           </tr>
         </tbody>
@@ -48,7 +58,9 @@ export default {
   data() {
     return {
       books: [],
-      searchKeyword: ''
+      searchKeyword: '',
+      sortKey: 'name',
+      sortDir: 1
     };
   },
   methods: {
@@ -62,6 +74,7 @@ export default {
       try {
         const books = await BookService.getAll();
         this.books = books;
+        this.sortBooks(); // Sort books after fetching
       } catch (error) {
         console.error('Error fetching books:', error);
       }
@@ -70,7 +83,7 @@ export default {
       if (confirm("Are you sure you want to delete this book?")) {
         try {
           await BookService.delete(id);
-          await this.fetchBooks();
+          await this.fetchBooks(); // Refetch books after deletion
         } catch (error) {
           console.error('Error deleting book:', error);
         }     
@@ -108,17 +121,51 @@ export default {
       } catch (error) {
         console.error('Error searching books:', error);
       }
+    },
+    toggleSortOrder() {
+      this.sortDir = this.sortDir === 1 ? -1 : 1;
+      this.sortBooks(); // Sort books when toggling order
+    },
+    sortBooks() {
+      const key = this.sortKey;
+      const dir = this.sortDir;
+      this.books.sort((a, b) => {
+        let valueA = a[key];
+        let valueB = b[key];
+        // If sorting by 'publicationYear', parse as integers for numeric comparison
+        if (key === 'publicationYear') {
+          valueA = parseInt(valueA);
+          valueB = parseInt(valueB);
+        }
+        // Sort based on field value and direction
+        return dir * (valueA < valueB ? -1 : (valueA > valueB ? 1 : 0));
+      });
     }
   },
   computed: {
-    filteredBooks() {
-      return this.books.filter(book => {
+    filteredAndSortedBooks() {
+      const filteredBooks = this.books.filter(book => {
         return (
           book.name.toLowerCase().includes(this.searchKeyword.toLowerCase()) ||
           book.originOrAuthor.toLowerCase().includes(this.searchKeyword.toLowerCase()) ||
           this.formatDate(book.publicationYear).toLowerCase().includes(this.searchKeyword.toLowerCase())
         );
       });
+      // Use slice to create a copy of the filtered and sorted array
+      return filteredBooks.slice().sort((a, b) => {
+        let valueA = a[this.sortKey];
+        let valueB = b[this.sortKey];
+        // If sorting by 'publicationYear', parse as integers for numeric comparison
+        if (this.sortKey === 'publicationYear') {
+          valueA = parseInt(valueA);
+          valueB = parseInt(valueB);
+        }
+        // Sort based on field value and direction
+        return this.sortDir * (valueA < valueB ? -1 : (valueA > valueB ? 1 : 0));
+      });
+    },
+    sortDirIcon() {
+      return this.sortDir === 1 ? '▲' : '▼';
     }
   },
   mounted() {

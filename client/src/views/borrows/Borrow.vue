@@ -4,6 +4,17 @@
     <div class="text-right mb-4 mt-0">
       <input type="text" class="form-control" placeholder="Search by reader name or book name" v-model="searchKeyword" @input="searchBorrows">
     </div>
+    <div class="text-right mb-4 mt-0">
+      <label class="pr-2">Sort by: </label>
+      <select v-model="sortKey">
+        <option value="readerName">Reader Name</option>
+        <option value="bookName">Book Name</option>
+        <option value="borrowDate">Borrow Date</option>
+        <option value="returnDate">Return Date</option>
+        <option value="status">Status</option>
+      </select>
+      <button class="btn btn-sm btn-secondary ml-2" @click="toggleSortOrder">{{ sortDirIcon }}</button>
+    </div>
     <div class="table-responsive">
       <table class="table table-striped custom-table">
         <thead>
@@ -11,9 +22,9 @@
             <th>#</th>
             <th>Reader Name</th>
             <th>Book Name</th>
-            <th>BorrowDate</th>
+            <th>Borrow Date</th>
             <th>Status</th>
-            <th>Return Date </th>
+            <th>Return Date</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -23,7 +34,7 @@
             <td>{{ borrow.readerName }}</td>
             <td>{{ borrow.bookName }}</td>
             <td>{{ formatDate(borrow.borrowDate) }}</td>
-            <td>{{ borrow.status }}</td>
+            <td :class="{ 'text-success': borrow.status === 'borrowed' }">{{ borrow.status }}</td>
             <td>{{ formatDate(borrow.returnDate) }}</td>
             <td>
               <button class="btn btn-sm btn-info" @click="editBorrow(borrow)">Edit</button>
@@ -47,7 +58,9 @@ export default {
   data() {
     return {
       borrows: [],
-      searchKeyword: ''
+      searchKeyword: '',
+      sortKey: 'readerName',
+      sortDir: 1
     };
   },
   methods: {
@@ -64,6 +77,7 @@ export default {
       try {
         const borrows = await BorrowService.getAll();
         this.borrows = borrows;
+        this.sortBorrows();
       } catch (error) {
         console.error('Error fetching borrows:', error);
       }
@@ -106,6 +120,22 @@ export default {
       } catch (error) {
         console.error('Error searching borrows:', error);
       }
+    },
+    toggleSortOrder() {
+      this.sortDir = this.sortDir === 1 ? -1 : 1;
+      this.sortBorrows();
+    },
+    sortBorrows() {
+    // Trường dữ liệu sẽ sắp xếp
+      const key = this.sortKey;
+    // Hướng sẽ sắp xếp (tăng/giảm)  
+      const dir = this.sortDir;
+      this.borrows.sort((a, b) => {
+        const valueA = a[key];
+        const valueB = b[key];
+    // So sánh chuỗi Unicode
+        return dir * valueA.localeCompare(valueB);
+      });
     }
   },
   computed: {
@@ -116,6 +146,9 @@ export default {
           borrow.bookName.toLowerCase().includes(this.searchKeyword.toLowerCase())
         );
       });
+    },
+    sortDirIcon() {
+      return this.sortDir === 1 ? '▲' : '▼';
     }
   },
   mounted() {

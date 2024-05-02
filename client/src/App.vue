@@ -35,7 +35,7 @@ export default {
 </script>
 
 
-<!-- Trong template của bạn -->
+<!-- Chọn Template -->
 <template>
   <div id="app" className="container-fluid">
     <!-- Sử dụng header khác nhau dựa trên vai trò của người dùng -->

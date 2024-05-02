@@ -54,6 +54,7 @@ export default {
         Field,
         ErrorMessage,
     },
+    // định nghĩa các sự kiện mà thành phần này có thể phát ra đến tp cha
     emits: ["submit:book", "delete:book"],
     props: {
         book: { type: Object, required: true }

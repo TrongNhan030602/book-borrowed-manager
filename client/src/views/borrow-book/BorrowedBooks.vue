@@ -84,6 +84,7 @@ export default {
         async returnBook(borrowID) {
             try {
                 await BorrowService.returnBook(borrowID);
+                alert("Bạn trả sách thành công!")
                 await this.fetchBorrowedBooks(); // Làm mới danh sách sách đã mượn sau khi trả sách
             } catch (error) {
                 console.error('Error returning book:', error);

@@ -13,12 +13,6 @@ const routes = [
     name: "book.login",
     component: Login,
   },
-  // 404 Not Found routes
-  {
-    path: "/:pathMatch(.*)*",
-    name: "notfound",
-    component: () => import("@/views/NotFound.vue"),
-  },
   // Books routes
   {
     path: "/books",
@@ -36,7 +30,7 @@ const routes = [
     name: "book.add",
     component: () => import("@/views/books/BookAdd.vue"),
   },
-  // publisher routes
+  // Publisher routes
   {
     path: "/publishers",
     name: "publisher",
@@ -53,7 +47,7 @@ const routes = [
     name: "publisher.add",
     component: () => import("@/views/publishers/PublisherAdd.vue"),
   },
-  // reader routes
+  // Reader routes
   {
     path: "/readers",
     name: "reader",
@@ -70,7 +64,7 @@ const routes = [
     name: "reader.add",
     component: () => import("@/views/readers/ReaderAdd.vue"),
   },
-  // admin  routes
+  // Admin routes
   {
     path: "/admin",
     name: "admin",
@@ -109,6 +103,12 @@ const routes = [
     path: "/borrowed-books",
     name: "borrow.list",
     component: () => import("@/views/borrow-book/BorrowedBooks.vue"),
+  },
+  // 404 Not Found routes
+  {
+    path: "/:pathMatch(.*)*",
+    name: "notfound",
+    component: () => import("@/views/NotFound.vue"),
   },
 ];
 
